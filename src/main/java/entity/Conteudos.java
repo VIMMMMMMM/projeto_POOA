@@ -3,12 +3,13 @@ package entity;
 import java.util.Objects;
 
 public class Conteudos {
-private int Id;
-private String detalhes;
+    private int Id;
+    private String detalhes;
 
-    public Conteudos(){
+    public Conteudos() {
 
     }
+
     public Conteudos(int id, String detalhes) {
         Id = id;
         this.detalhes = detalhes;
