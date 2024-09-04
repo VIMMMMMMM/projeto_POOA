@@ -1,15 +1,18 @@
 package controller;
 
-import entity.Conteudos;
+import dao.ConteudoHSQL;
+import entity.Conteudo;
+import entity.Usuario;
+import service.ConteudoService;
+import service.UsuarioService;
 
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Base {
     static Scanner scanner = new Scanner(System.in);
-    static Conteudos conteudos = new Conteudos();
-    static HashMap<Integer, String> listaConteudos = new HashMap<>();
-    static Login login = new Login();
+    static ConteudoService conteudoService = new ConteudoService(new ConteudoHSQL());
+    static UsuarioService usuarioService = new UsuarioService();
 
     public void menuInicial() {
         int escolha = 0;
@@ -17,16 +20,19 @@ public class Base {
             System.out.println("Menu incial: ");
             System.out.println("1. Login");
             System.out.println("2. Listar conteudos");
-            System.out.println("4. Sair");
+            System.out.println("3. Sair");
             escolha = scanner.nextInt();
             switch (escolha) {
                 case 1:
-                    menuPos();
+                    System.out.println("digite seu usuario e senha");
+                    menuPos(usuarioService.login(scanner.next(),scanner.next()));
                     continue;
                 case 2:
-                    System.out.println(listaConteudos.toString());
+                    for (Conteudo conteudo : conteudoService.listar()) {
+                        System.out.println(conteudo);
+                    }
                     break;
-                case 4:
+                case 3:
                     System.out.println("voce saiu");
                     break;
                 default:
@@ -36,12 +42,11 @@ public class Base {
         }
     }
 
-    private void menuPos() {
-        int escolha = 0, idTemp;
+    private void menuPos(Usuario usuario) {
+        int escolha = 0,idTemp=0;
         String alteracao;
         try {
-            System.out.println("digite seu usuario e senha");
-            if (login.login(scanner.next(), scanner.next())) {
+            if (usuario != null){
                 while (escolha != 5) {
                     System.out.println("Menu incial: ");
                     System.out.println("1. Criar conteudo");
@@ -50,31 +55,43 @@ public class Base {
                     System.out.println("4. Excluir conteudo");
                     System.out.println("5. Logout");
                     escolha = scanner.nextInt();
+
                     switch (escolha) {
                         case 1 -> {
-                            System.out.println("digite o id do conteudo");
-                            conteudos.setId(scanner.nextInt());
-                            System.out.println("digite a descricao do conteudo");
-                            conteudos.setDetalhes(scanner.next());
-                            criador(conteudos.getId(), conteudos.getDetalhes());
+                            String titulo = lerInfo("Digite o Titulo");
+                            String texto = lerInfo("Digite o Texto");
+                            Conteudo conteudo = new Conteudo(idTemp, titulo, texto, usuario);
+                            idTemp++;
+                            conteudoService.save(conteudo);
+                            System.out.println("Conteudo criado!");
                         }
                         case 2 -> {
-                            System.out.println(listaConteudos.toString());
+                            for (Conteudo conteudo : conteudoService.listar()) {
+                                System.out.println(conteudo);
+                            }
                         }
                         case 3 -> {
-                            System.out.println("digite o id do conteudo que quer mudar");
-                            idTemp = scanner.nextInt();
-                            System.out.println("digite a alteracao");
-                            alteracao = scanner.next();
-                            alterador(idTemp, alteracao);
+
+                                String ids = lerInfo("Digite o ID do conteudo para atualizar");
+                                int id = Integer.parseInt(ids);
+                                String titulo = lerInfo("Digite o Titulo");
+                                String texto = lerInfo("Digite o Texto");
+                                conteudoService.atualizar(id, titulo, texto, usuario);
+                                System.out.println("Conteudo Atualizado.");
+
                         }
                         case 4 -> {
                             System.out.println("digite o id do conteudo que quer remover");
-                            idTemp = scanner.nextInt();
-                            removedor(idTemp);
+                            int id = scanner.nextInt();
+                            boolean removido = conteudoService.remover(id);
+                            if (removido) {
+                                System.out.println("Conteudo excluido.");
+                            } else {
+                                System.out.println("Conteudo não encontrado.");
+                            }
                         }
                         case 5 -> {
-                            System.out.println("voce deslogou");
+                            usuario = null;
                         }
                         default -> {
                             System.out.println("opcao invalida");
@@ -82,42 +99,17 @@ public class Base {
                     }
                 }
             }
+
         } catch (RuntimeException e) {
             e.getMessage();
         }
     }
 
-    private HashMap<Integer, String> criador(int id, String detalhes) {
-        try {
-            listaConteudos.put(id, detalhes);
-            return listaConteudos;
-        } catch (RuntimeException e) {
-            e.getMessage();
-            return null;
-        }
+    private String lerInfo(String label) {
+        System.out.println(label + ": ");
+        return scanner.nextLine().trim();
     }
 
-    private void alterador(int idTemp, String alteracao) {
-        try {
-            if (listaConteudos.containsKey(idTemp))
-                listaConteudos.replace(idTemp, alteracao);
-            else {
-                System.out.println("conteudo nao existe");
-            }
-        } catch (RuntimeException e) {
-            e.getMessage();
-        }
-    }
 
-    private void removedor(int idTemp) {
-        try {
-            if (listaConteudos.containsKey(idTemp))
-                listaConteudos.remove(idTemp);
-            else {
-                System.out.println("conteudo nao exite");
-            }
-        } catch (RuntimeException e) {
-            e.getMessage();
-        }
-    }
+
 }
