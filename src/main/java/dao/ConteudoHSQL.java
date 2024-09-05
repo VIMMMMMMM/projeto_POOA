@@ -17,7 +17,7 @@ public class ConteudoHSQL implements Persistencia<Conteudo> {
     }
     public void criarTabela() {
         String sql = "CREATE TABLE IF NOT EXISTS Conteudo (" +
-                "id INTEGER PRIMARY KEY, " +
+                "id INTEGER IDENTITY PRIMARY KEY, " +
                 "titulo VARCHAR(255), " +
                 "texto VARCHAR(10000), " +
                 "autor VARCHAR(255))";

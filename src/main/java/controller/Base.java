@@ -9,6 +9,8 @@ import service.UsuarioService;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 public class Base {
     static Scanner scanner = new Scanner(System.in);
     static ConteudoService conteudoService = new ConteudoService(new ConteudoHSQL());
@@ -34,6 +36,7 @@ public class Base {
                     break;
                 case 3:
                     System.out.println("voce saiu");
+                    exit(0);
                     break;
                 default:
                     System.out.println("opcao invalida");
@@ -44,7 +47,6 @@ public class Base {
 
     private void menuPos(Usuario usuario) {
         int escolha = 0,idTemp=0;
-        String alteracao;
         try {
             if (usuario != null){
                 while (escolha != 5) {
@@ -60,8 +62,7 @@ public class Base {
                         case 1 -> {
                             String titulo = lerInfo("Digite o Titulo");
                             String texto = lerInfo("Digite o Texto");
-                            Conteudo conteudo = new Conteudo(idTemp, titulo, texto, usuario);
-                            idTemp++;
+                            Conteudo conteudo = new Conteudo(null, titulo, texto, usuario);
                             conteudoService.save(conteudo);
                             System.out.println("Conteudo criado!");
                         }
@@ -73,9 +74,9 @@ public class Base {
                         case 3 -> {
 
                                 String ids = lerInfo("Digite o ID do conteudo para atualizar");
-                                int id = Integer.parseInt(ids);
                                 String titulo = lerInfo("Digite o Titulo");
                                 String texto = lerInfo("Digite o Texto");
+                                int id = Integer.parseInt(ids);
                                 conteudoService.atualizar(id, titulo, texto, usuario);
                                 System.out.println("Conteudo Atualizado.");
 
@@ -107,7 +108,7 @@ public class Base {
 
     private String lerInfo(String label) {
         System.out.println(label + ": ");
-        return scanner.nextLine().trim();
+        return scanner.next();
     }
 
 
