@@ -16,7 +16,7 @@ public class Base {
     static ConteudoService conteudoService = new ConteudoService(new ConteudoHSQL());
     static UsuarioService usuarioService = new UsuarioService(new UsuarioHSQL());
 
-    public void menuInicial() {
+    public Usuario menuInicial() {
         int escolha = 0;
         while (escolha != 4) {
             System.out.println("Menu incial: ");
@@ -27,8 +27,11 @@ public class Base {
             switch (escolha) {
                 case 1:
                     System.out.println("digite seu usuario e senha");
-                    menuPos(usuarioService.login(scanner.next(),scanner.next()));
-                    continue;
+                   Usuario usuario = usuarioService.login(scanner.next(),scanner.next());
+                   if (usuario!= null){
+                       return usuario;
+                   }
+
                 case 2:
                     for (Conteudo conteudo : conteudoService.listar()) {
                         System.out.println(conteudo);
@@ -43,12 +46,12 @@ public class Base {
                     break;
             }
         }
+        return null;
     }
 
-    private void menuPos(Usuario usuario) {
+    public Usuario menuPos(Usuario usuario) {
         int escolha = 0;
         try {
-            if (usuario != null){
                 while (escolha != 10) {
                     System.out.println("Menu incial: ");
                     System.out.println("1. Criar conteudo");
@@ -62,7 +65,6 @@ public class Base {
                     System.out.println("9. alterar senha ");
                     System.out.println("10. Logout");
                     escolha = scanner.nextInt();
-
                     switch (escolha) {
                         case 1 -> {
                             String titulo = lerInfo("Digite o Titulo");
@@ -87,7 +89,6 @@ public class Base {
                                 }else {
                                     System.out.println("conteudo nao encontrado");
                                 }
-
                         }
                         case 4 -> {
                             System.out.println("digite o id do conteudo que quer remover");
@@ -114,8 +115,9 @@ public class Base {
                         case 7 -> {
                             if (!usuarioService.listar().isEmpty()){
                                 String username = lerInfo("Digite o Username do usuario para atualizar");
-                                String password = lerInfo("Digite a Password");
-                                usuarioService.atualizar(username,password);
+                                String newUsername = lerInfo("Digite o novo Username");
+                                String newPassword = lerInfo("Digite a nova Password");
+                                usuarioService.atualizar(newUsername,newPassword,username);
                                 System.out.println("usuario Atualizado.");
                             }else {
                                 System.out.println("usuario nao encontrado");
@@ -135,8 +137,8 @@ public class Base {
                         case 9 -> {
                             if (!usuarioService.listar().isEmpty()){
                                 String username = lerInfo("Digite o Username do usuario para alterar senha");
-                                String password = lerInfo("Digite a nova senha");
-                                usuarioService.atualizar(username,password);
+                                String newPassword = lerInfo("Digite a nova password");
+                                usuarioService.alterarSenha(username,newPassword);
                                 System.out.println("senha Alterada.");
                             }else {
                                 System.out.println("usuario nao encontrado");
@@ -150,11 +152,11 @@ public class Base {
                         default -> System.out.println("opcao invalida");
                     }
                 }
-            }
 
         } catch (RuntimeException e) {
             e.getMessage();
         }
+        return usuario;
     }
 
     private String lerInfo(String label) {

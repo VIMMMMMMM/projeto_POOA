@@ -52,6 +52,7 @@ public class UsuarioHSQL implements PersistenciaUsuario<Usuario> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, usuario.getUsername());
             preparedStatement.setString(2, usuario.getPassword());
+            preparedStatement.setString(3, usuario.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,7 +71,7 @@ public class UsuarioHSQL implements PersistenciaUsuario<Usuario> {
             while (rs.next()) {
                 Usuario usuario = new Usuario();
                 usuario.setUsername(rs.getString("username"));
-                usuario.setPassword(rs.getString("titulo"));
+                usuario.setPassword(rs.getString("password"));
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
@@ -100,6 +101,7 @@ public class UsuarioHSQL implements PersistenciaUsuario<Usuario> {
         try (Connection connection= ConnectionFactory.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, usuario.getPassword());
+            preparedStatement.setString(2, usuario.getUsername());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

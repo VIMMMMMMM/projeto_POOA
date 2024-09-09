@@ -1,6 +1,7 @@
 package entity;
 
 public class Usuario {
+    private String id;
     private String username;
     private String password;
 
@@ -10,6 +11,18 @@ public class Usuario {
     public Usuario(String username, String password) {
         this.username = username;
         this.password = password;
+    }public Usuario(String newUsername, String newPassword,String id) {
+        this.username = newUsername;
+        this.password = newPassword;
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -32,6 +45,7 @@ public class Usuario {
     public String toString() {
         return "Usuario{" +
                 "username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

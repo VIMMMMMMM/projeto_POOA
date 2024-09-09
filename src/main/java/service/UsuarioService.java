@@ -1,12 +1,11 @@
 package service;
 
-import entity.Conteudo;
+
 import entity.Usuario;
-import repository.PersistenciaConteudo;
 import repository.PersistenciaUsuario;
 
 import java.util.List;
-import java.util.Objects;
+
 
 public class UsuarioService {
     PersistenciaUsuario<Usuario> usuarioRepository;
@@ -15,17 +14,15 @@ public class UsuarioService {
         abc.setPassword("admin");
         abc.setUsername("admin");
         try {
-            if (!Objects.equals(abc.getUsername(), usuario) || !Objects.equals(abc.getPassword(), senha)) {
-                System.out.println("usuario e/ou senha invalido");
-               return null;
-            } else {
+            if (abc.getUsername().equals(usuario) && abc.getPassword().equals(senha)) {
                 return abc;
+            } else {
+                System.out.println("usuario e/ou senha invalido");
             }
         } catch (RuntimeException e) {
             e.getMessage();
         }
-
-        return abc;
+        return null;
     }
 
     public UsuarioService(PersistenciaUsuario<Usuario> persistencia) {
@@ -36,8 +33,8 @@ public class UsuarioService {
     }
 
 
-    public void atualizar( String username, String password) {
-        usuarioRepository.atualizar(new Usuario(username,password));
+    public void atualizar( String newUsername, String newPassword, String id) {
+        usuarioRepository.atualizar(new Usuario(newUsername,newPassword,id));
     }
 
     public List<Usuario> listar() {
@@ -47,8 +44,8 @@ public class UsuarioService {
     public boolean remover(String username) {
         return usuarioRepository.remover(username);
     }
-    public void alterarSenha(String username, String password){
-        usuarioRepository.alterarSenha(new Usuario(username,password));
+    public void alterarSenha(String username,String newPassword){
+        usuarioRepository.alterarSenha(new Usuario(username,newPassword));
     }
 
 }

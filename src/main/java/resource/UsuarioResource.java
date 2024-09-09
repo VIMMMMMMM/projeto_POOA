@@ -19,7 +19,7 @@ public class UsuarioResource implements PersistenciaUsuario<Usuario> {
     @Override
     public void atualizar(Usuario entidade) {
         for (Usuario usuario : usuarios) {
-            if (usuario.getUsername().equals(entidade.getUsername())) {
+            if (usuario.getId().equals(entidade.getId())) {
                 usuario.setUsername(entidade.getUsername());
                 usuario.setPassword(entidade.getPassword());
                 break;
