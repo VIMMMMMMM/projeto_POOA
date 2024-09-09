@@ -49,7 +49,7 @@ public class Base {
         int escolha = 0;
         try {
             if (usuario != null){
-                while (escolha != 5) {
+                while (escolha != 10) {
                     System.out.println("Menu incial: ");
                     System.out.println("1. Criar conteudo");
                     System.out.println("2. Listar conteudo");
