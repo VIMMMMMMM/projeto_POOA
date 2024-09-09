@@ -2,14 +2,14 @@ package service;
 
 import entity.Conteudo;
 import entity.Usuario;
-import repository.Persistencia;
+import repository.PersistenciaConteudo;
 
 import java.util.List;
 
 public class ConteudoService {
-    Persistencia<Conteudo> conteudoRepository;
+    PersistenciaConteudo<Conteudo> conteudoRepository;
 
-    public ConteudoService(Persistencia<Conteudo> persistencia) {
+    public ConteudoService(PersistenciaConteudo<Conteudo> persistencia) {
         this.conteudoRepository = persistencia;
     }
     public void save(Conteudo entidade) {

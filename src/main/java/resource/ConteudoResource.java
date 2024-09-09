@@ -1,14 +1,14 @@
 package resource;
 
 import entity.Conteudo;
-import repository.Persistencia;
+import repository.PersistenciaConteudo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
 
-public class ConteudoResource implements Persistencia<Conteudo> {
+public class ConteudoResource implements PersistenciaConteudo<Conteudo> {
     private List<Conteudo> conteudos = new ArrayList<>();
     private int count = 1;
 

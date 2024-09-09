@@ -3,13 +3,13 @@ package dao;
 import entity.Conteudo;
 import entity.Usuario;
 import infra.ConnectionFactory;
-import repository.Persistencia;
+import repository.PersistenciaConteudo;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConteudoHSQL implements Persistencia<Conteudo> {
+public class ConteudoHSQL implements PersistenciaConteudo<Conteudo> {
 
 
     public ConteudoHSQL() {

@@ -32,7 +32,6 @@ public class Usuario {
     public String toString() {
         return "Usuario{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }
