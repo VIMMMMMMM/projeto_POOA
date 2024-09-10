@@ -18,33 +18,41 @@ public class Base {
 
     public Usuario menuInicial() {
         int escolha = 0;
-        while (escolha != 4) {
-            System.out.println("Menu incial: ");
-            System.out.println("1. Login");
-            System.out.println("2. Listar conteudos");
-            System.out.println("3. Sair");
-            escolha = scanner.nextInt();
-            switch (escolha) {
-                case 1:
-                    System.out.println("digite seu usuario e senha");
-                   Usuario usuario = usuarioService.login(scanner.next(),scanner.next());
-                   if (usuario!= null){
-                       return usuario;
-                   }
+        try {
+            while (escolha != 4) {
+                System.out.println("Menu incial: ");
+                System.out.println("1. Login");
+                System.out.println("2. Listar conteudos");
+                System.out.println("3. Sair");
+                escolha = scanner.nextInt();
+                switch (escolha) {
+                    case 1:
+                        if (usuarioService.listar().isEmpty()){
+                            System.out.println("seu primeiro login!");
+                            System.out.println("digite seu usuario e senha");
+                            return usuarioService.login(scanner.next(),scanner.next());
+                        }else {
+                            System.out.println("digite seu usuario e senha");
+                            return usuarioService.login(scanner.next(),scanner.next());
+                        }
 
-                case 2:
-                    for (Conteudo conteudo : conteudoService.listar()) {
-                        System.out.println(conteudo);
-                    }
-                    break;
-                case 3:
-                    System.out.println("voce saiu");
-                    exit(0);
-                    break;
-                default:
-                    System.out.println("opcao invalida");
-                    break;
+                    case 2:
+                        for (Conteudo conteudo : conteudoService.listar()) {
+                            System.out.println(conteudo);
+                        }
+                        break;
+                    case 3:
+                        System.out.println("voce saiu");
+                        exit(0);
+                        break;
+                    default:
+                        System.out.println("opcao invalida");
+                        break;
+                }
             }
+        }
+        catch (RuntimeException e){
+            e.getMessage();
         }
         return null;
     }
@@ -61,17 +69,17 @@ public class Base {
                     System.out.println("5. Criar usuario");
                     System.out.println("6. Listar usuario ");
                     System.out.println("7. Atualizar usuario");
-                    System.out.println("8. Excluir usuaio ");
+                    System.out.println("8. Excluir usuario ");
                     System.out.println("9. alterar senha ");
                     System.out.println("10. Logout");
                     escolha = scanner.nextInt();
                     switch (escolha) {
                         case 1 -> {
-                            String titulo = lerInfo("Digite o Titulo");
-                            String texto = lerInfo("Digite o Texto");
-                            Conteudo conteudo = new Conteudo(null, titulo, texto, usuario);
-                            conteudoService.save(conteudo);
-                            System.out.println("Conteudo criado!");
+                                String titulo = lerInfo("Digite o Titulo");
+                                String texto = lerInfo("Digite o Texto");
+                                Conteudo conteudo = new Conteudo(null, titulo, texto, usuario);
+                                conteudoService.save(conteudo);
+                                System.out.println("Conteudo criado!");
                         }
                         case 2 -> {
                             for (Conteudo conteudo : conteudoService.listar()) {
@@ -120,7 +128,7 @@ public class Base {
                                 usuarioService.atualizar(newUsername,newPassword,username);
                                 System.out.println("usuario Atualizado.");
                             }else {
-                                System.out.println("usuario nao encontrado");
+                                System.out.println("usuario nao encontrado.");
                             }
 
                         }
@@ -132,6 +140,10 @@ public class Base {
                                 System.out.println("Usuario excluido.");
                             } else {
                                 System.out.println("Usuario não encontrado.");
+                            }
+                            if (usuarioService.listar().isEmpty()){
+                                System.out.println("nao ha usuarios");
+                                return null;
                             }
                         }
                         case 9 -> {

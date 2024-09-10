@@ -10,20 +10,28 @@ import java.util.List;
 public class UsuarioService {
     PersistenciaUsuario<Usuario> usuarioRepository;
     public Usuario login(String usuario, String senha) {
-        Usuario abc = new Usuario();
-        abc.setPassword("admin");
-        abc.setUsername("admin");
         try {
-            if (abc.getUsername().equals(usuario) && abc.getPassword().equals(senha)) {
-                return abc;
-            } else {
-                System.out.println("usuario e/ou senha invalido");
+            if (listar().isEmpty()){
+                Usuario usuario1 =new Usuario(usuario,senha);
+                save(usuario1);
+                System.out.println("usuario criado");
+                return usuario1;
+            }else {
+                for (Usuario usuario1 : listar()) {
+                    if (usuario1.getUsername().equals(usuario) || usuario1.getPassword().equals(senha)) {
+                        System.out.println("seja bem vindo");
+                        return usuario1;
+                    }
+                }
+                    }
+
             }
-        } catch (RuntimeException e) {
+        catch (RuntimeException e) {
             e.getMessage();
         }
         return null;
-    }
+        }
+
 
     public UsuarioService(PersistenciaUsuario<Usuario> persistencia) {
         this.usuarioRepository = persistencia;

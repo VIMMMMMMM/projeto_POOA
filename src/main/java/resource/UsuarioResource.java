@@ -2,7 +2,7 @@ package resource;
 
 
 import entity.Usuario;
-import repository.PersistenciaConteudo;
+
 import repository.PersistenciaUsuario;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class UsuarioResource implements PersistenciaUsuario<Usuario> {
     }
     @Override
     public boolean remover(String username) {
-        return usuarios.removeIf(usuario -> usuario.getUsername().equals(username));
+        return usuarios.removeIf(usuario -> usuario.getUsername().contains(username));
     }
     public void alterarSenha(Usuario entidade){
         for (Usuario usuario : usuarios) {
